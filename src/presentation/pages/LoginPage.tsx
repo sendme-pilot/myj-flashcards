@@ -25,9 +25,10 @@ export function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-cream px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gold">MYJ</h1>
+          {/* TODO: replace with Michelle Yuen Jewelry logo (will be uploaded via Firebase Storage) */}
+          <div className="w-24 h-24 mx-auto mb-2 rounded-full bg-gold/10 border-2 border-gold/30" />
           <p className="text-stone-500 mt-1">Michelle Yuen Jewelry</p>
-          <p className="text-stone-600 mt-2 text-lg">員工培訓系統</p>
+          <p className="text-stone-600 mt-2 text-lg">培訓系統</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 space-y-4 border border-gold/20">

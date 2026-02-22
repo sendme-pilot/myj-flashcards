@@ -22,7 +22,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const appUser = await userRepo.getByUid(firebaseUser.uid);
+        let appUser = await userRepo.getByUid(firebaseUser.uid);
+        if (!appUser) {
+          const displayName =
+            firebaseUser.displayName ||
+            firebaseUser.email?.split('@')[0] ||
+            'User';
+          const newUser: User = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email ?? '',
+            displayName,
+            role: 'committed',
+          };
+          await userRepo.create(newUser);
+          appUser = newUser;
+        }
         setUser(appUser);
       } else {
         setUser(null);

@@ -10,10 +10,11 @@ export class AddFlashcard {
 
   async execute(dto: AddFlashcardDTO): Promise<Flashcard> {
     return this.flashcardRepo.add({
-      collection: dto.collection,
-      itemName: dto.itemName,
       front: dto.front,
       back: dto.back,
+      tags: dto.tags,
+      frontImages: dto.frontImages,
+      backImages: dto.backImages,
       status: 'draft',
     });
   }

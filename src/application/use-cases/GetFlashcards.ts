@@ -16,7 +16,7 @@ export class GetFlashcards {
     return this.flashcardRepo.getByStatus(status);
   }
 
-  async byCollection(collection: string): Promise<Flashcard[]> {
-    return this.flashcardRepo.getByCollection(collection);
+  async byTags(tagIds: string[]): Promise<Flashcard[]> {
+    return this.flashcardRepo.getByTags(tagIds);
   }
 }

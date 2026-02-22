@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuthContext } from './presentation/context/AuthContext';
 import { LoginPage } from './presentation/pages/LoginPage';
 import { AdminPage } from './presentation/pages/AdminPage';
-import { StaffPage } from './presentation/pages/StaffPage';
+import { TagManagementPage } from './presentation/pages/TagManagementPage';
+import { CommittedMemberPage } from './presentation/pages/StaffPage';
 
 function AppRoutes() {
   const { user, loading } = useAuthContext();
@@ -27,6 +28,7 @@ function AppRoutes() {
     return (
       <Routes>
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/tags" element={<TagManagementPage />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Routes>
     );
@@ -34,8 +36,8 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/staff" element={<StaffPage />} />
-      <Route path="*" element={<Navigate to="/staff" replace />} />
+      <Route path="/member" element={<CommittedMemberPage />} />
+      <Route path="*" element={<Navigate to="/member" replace />} />
     </Routes>
   );
 }

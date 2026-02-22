@@ -18,10 +18,11 @@ const COLLECTION = 'flashcards';
 function toFlashcard(id: string, data: Record<string, unknown>): Flashcard {
   return {
     id,
-    collection: data.collection as string,
-    itemName: data.itemName as string,
     front: data.front as string,
     back: data.back as string,
+    tags: (data.tags as string[]) ?? [],
+    frontImages: (data.frontImages as string[]) ?? [],
+    backImages: (data.backImages as string[]) ?? [],
     status: data.status as CardStatus,
     createdAt: (data.createdAt as Timestamp).toDate(),
     updatedAt: (data.updatedAt as Timestamp).toDate(),
@@ -40,8 +41,9 @@ export class FirebaseFlashcardRepository implements IFlashcardRepository {
     return snap.docs.map((d) => toFlashcard(d.id, d.data()));
   }
 
-  async getByCollection(col: string): Promise<Flashcard[]> {
-    const q = query(collection(db, COLLECTION), where('collection', '==', col));
+  async getByTags(tagIds: string[]): Promise<Flashcard[]> {
+    if (tagIds.length === 0) return this.getAll();
+    const q = query(collection(db, COLLECTION), where('tags', 'array-contains-any', tagIds));
     const snap = await getDocs(q);
     return snap.docs.map((d) => toFlashcard(d.id, d.data()));
   }

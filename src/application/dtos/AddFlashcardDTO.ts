@@ -1,6 +1,7 @@
 export interface AddFlashcardDTO {
-  collection: string;
-  itemName: string;
   front: string;
   back: string;
+  tags: string[];
+  frontImages: string[];
+  backImages: string[];
 }

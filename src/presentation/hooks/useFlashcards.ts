@@ -12,18 +12,28 @@ const getFlashcards = new GetFlashcards(repo);
 const addFlashcard = new AddFlashcard(repo);
 const approveFlashcard = new ApproveFlashcard(repo);
 
-export function useFlashcards(filter?: { status?: CardStatus }) {
+export function useFlashcards(filter?: { status?: CardStatus; tagIds?: string[] }) {
   const [cards, setCards] = useState<Flashcard[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const tagKey = filter?.tagIds?.join(',') ?? '';
+
   const load = useCallback(async () => {
     setLoading(true);
-    const result = filter?.status
-      ? await getFlashcards.byStatus(filter.status)
-      : await getFlashcards.all();
+    let result: Flashcard[];
+    if (filter?.tagIds && filter.tagIds.length > 0) {
+      result = await getFlashcards.byTags(filter.tagIds);
+      if (filter.status) {
+        result = result.filter((c) => c.status === filter.status);
+      }
+    } else if (filter?.status) {
+      result = await getFlashcards.byStatus(filter.status);
+    } else {
+      result = await getFlashcards.all();
+    }
     setCards(result);
     setLoading(false);
-  }, [filter?.status]);
+  }, [filter?.status, tagKey]);
 
   useEffect(() => {
     load();
@@ -39,11 +49,5 @@ export function useFlashcards(filter?: { status?: CardStatus }) {
     await load();
   };
 
-  const grouped = cards.reduce<Record<string, Flashcard[]>>((acc, card) => {
-    if (!acc[card.collection]) acc[card.collection] = [];
-    acc[card.collection].push(card);
-    return acc;
-  }, {});
-
-  return { cards, grouped, loading, add, setStatus, reload: load };
+  return { cards, loading, add, setStatus, reload: load };
 }
